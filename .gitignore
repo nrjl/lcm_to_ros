@@ -1,0 +1,7 @@
+*.py[cod]
+*~
+exlcm/*
+msg/*
+launch/all_republishers.launch
+autosrc/*
+lcm/*.lcm

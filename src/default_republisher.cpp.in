@@ -1,0 +1,71 @@
+#include <ros/ros.h>
+#include <ros/console.h>
+#include <string>
+
+#include <lcm/lcm-cpp.hpp>
+
+#include "lcm_volturnus/@MESSAGE_TYPE@.h"
+#include "@MESSAGE_TYPE@.hpp"
+
+class LCMToROSRepublisher
+{
+    public:
+        LCMToROSRepublisher(ros::NodeHandle& n);
+        ~LCMToROSRepublisher();
+        void lcmCallback(const lcm::ReceiveBuffer* rbuf,
+                const std::string& channel_name,
+                const exlcm::@MESSAGE_TYPE@* msg);
+        
+    private:        
+        ros::NodeHandle nh;
+        ros::Publisher ros_pub;
+        
+        exlcm::@MESSAGE_TYPE@ lcm_msg;
+        lcm_volturnus::@MESSAGE_TYPE@ ros_msg;
+        
+};
+
+LCMToROSRepublisher::LCMToROSRepublisher(ros::NodeHandle& n) 
+{
+    nh = n;
+   
+    // Publisher/s
+    ros_pub = nh.advertise<lcm_volturnus::@MESSAGE_TYPE@>("@MESSAGE_TYPE@", 10);
+    ROS_INFO("Publisher created");
+};
+
+LCMToROSRepublisher::~LCMToROSRepublisher() 
+{    
+    ROS_INFO("LCMToROSRepublisher destructor.");
+}
+
+void LCMToROSRepublisher::lcmCallback(const lcm::ReceiveBuffer* rbuf,
+        const std::string& channel_name,
+        const exlcm::@MESSAGE_TYPE@* msg)
+{
+    ROS_INFO("Received message on channel \"%s\"", channel_name.c_str());
+    
+    memcpy( &ros_msg, msg, sizeof(*msg));
+    ros_pub.publish(ros_msg);
+};
+        
+
+int main(int argc, char** argv)
+{
+    lcm::LCM lcm;
+    if(!lcm.good())
+        return 1;
+
+    ros::init(argc, argv, "@MESSAGE_TYPE@_republish");
+    ros::NodeHandle nh;   
+
+    LCMToROSRepublisher handlerObject(nh);
+    lcm.subscribe("@MESSAGE_TYPE@", &LCMToROSRepublisher::lcmCallback, &handlerObject);
+
+    int lcm_timeout = 100; //ms
+    while( ( lcm.handleTimeout(lcm_timeout) >= 0 ) && (ros::ok()) ) //
+        ros::spinOnce();
+
+    return 0;
+}
+
