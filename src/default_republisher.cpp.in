@@ -20,9 +20,7 @@ class LCMToROSRepublisher
         ros::NodeHandle nh;
         ros::Publisher ros_pub;
         
-        exlcm::@MESSAGE_TYPE@ lcm_msg;
-        lcm_to_ros::@MESSAGE_TYPE@ ros_msg;
-        
+        lcm_to_ros::@MESSAGE_TYPE@ ros_msg;        
 };
 
 LCMToROSRepublisher::LCMToROSRepublisher(ros::NodeHandle& n) 

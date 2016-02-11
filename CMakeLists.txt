@@ -57,7 +57,7 @@ include_directories(
 #   src/${PROJECT_NAME}/lcm_to_ros.cpp
 # )
 
-
+add_subdirectory(src)
 add_subdirectory(autosrc)
 
 #############
