@@ -37,7 +37,7 @@ generate_messages(
 ###################################
 catkin_package(
   INCLUDE_DIRS exlcm
-#  LIBRARIES lcm_volturnus
+#  LIBRARIES lcm_to_ros
   CATKIN_DEPENDS roscpp std_msgs message_runtime
 #  DEPENDS system_lib
 )
@@ -53,8 +53,8 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(lcm_volturnus
-#   src/${PROJECT_NAME}/lcm_volturnus.cpp
+# add_library(lcm_to_ros
+#   src/${PROJECT_NAME}/lcm_to_ros.cpp
 # )
 
 

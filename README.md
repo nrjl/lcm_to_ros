@@ -1,4 +1,4 @@
-# LCM Volturnus
+# LCM to ROS
 
 This package is to subscribe to and republish LCM messages into ROS messages.
 

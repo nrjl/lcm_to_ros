@@ -4,7 +4,7 @@
 
 #include <lcm/lcm-cpp.hpp>
 
-#include "lcm_volturnus/@MESSAGE_TYPE@.h"
+#include "lcm_to_ros/@MESSAGE_TYPE@.h"
 #include "@MESSAGE_TYPE@.hpp"
 
 class LCMToROSRepublisher
@@ -21,7 +21,7 @@ class LCMToROSRepublisher
         ros::Publisher ros_pub;
         
         exlcm::@MESSAGE_TYPE@ lcm_msg;
-        lcm_volturnus::@MESSAGE_TYPE@ ros_msg;
+        lcm_to_ros::@MESSAGE_TYPE@ ros_msg;
         
 };
 
@@ -30,7 +30,7 @@ LCMToROSRepublisher::LCMToROSRepublisher(ros::NodeHandle& n)
     nh = n;
    
     // Publisher/s
-    ros_pub = nh.advertise<lcm_volturnus::@MESSAGE_TYPE@>("@MESSAGE_TYPE@", 10);
+    ros_pub = nh.advertise<lcm_to_ros::@MESSAGE_TYPE@>("@MESSAGE_TYPE@", 10);
     ROS_INFO("Publisher created");
 };
 

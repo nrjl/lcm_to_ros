@@ -45,7 +45,7 @@ do
     echo " done."
     
     echo -n -e "\tAdding entry to $LAUNCH_FILE ..."
-    echo -e "\t\t<node pkg=\"lcm_volturnus\" type=\"${MESSAGE_NAME}_republisher\" respawn=\"false\" name=\"${MESSAGE_NAME}_republisher\" output=\"screen\"/>" >> $LAUNCH_FILE
+    echo -e "\t\t<node pkg=\"lcm_to_ros\" type=\"${MESSAGE_NAME}_republisher\" respawn=\"false\" name=\"${MESSAGE_NAME}_republisher\" output=\"screen\"/>" >> $LAUNCH_FILE
     echo " done."
 done
 
