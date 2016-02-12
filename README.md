@@ -4,7 +4,7 @@ This package is to subscribe to and republish [Lightweight Communications and Ma
 
 The goal is to make a relatively generic system that requires only LCM message files and automatically generate republishers that subscribe to an LCM topic and republish the same messages onto a ROS topic.
 
-This package automatically generates ROS message files, CPP files, a launch file and corresponding CMakeLists for catkin_make to create a set of republishers.
+This package automatically generates ROS message files, CPP files, a launch file and corresponding CMakeLists for catkin_make to create a set of republishers. The system has only been tested on Ubuntu 14.04 with ROS Indigo.
 
 The user should only need to create the *.lcm message files.
 
@@ -48,7 +48,6 @@ Add lcm messages to the 'lcm' folder. Note that the filenames are important; the
 Run the bash script and then make using catkin_make:
 ```
 cd lcm_to_ros
-chmod +x lcm_to_ros_generate.sh
 ./lcm_to_ros_generate.sh
 cd ~/catkin_ws
 catkin_make
