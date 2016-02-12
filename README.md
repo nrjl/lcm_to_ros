@@ -73,14 +73,19 @@ As usual, output topics can be remapped using standard ROS commands if required.
 This repo contains a test example. If you haven't added any other LCM messages (or even if you have) you should be able to confirm the code is working by performing the compilation steps, then:
 In a new terminal:
 `roscore`
+
 In another terminal:
 `rosrun lcm_to_ros example_t_republisher`
+
 In a third terminal, check that the topic `/example_t` exists using:
 `rostopic list`
+
 Then, show messages using:
 `rostopic echo /example_t`
+
 Finally, in a fourth terminal:
 `rosrun lcm_to_ros example_t_send_lcm`
+
 Confirm that a message appears in the `rostopic echo` terminal.
 
 

@@ -16,10 +16,19 @@ echo -e "\t<group ns=\"lcm_to_ros\">" >>  $LAUNCH_FILE
 
 for INFILE in lcm/*.lcm
 do
+    echo "Processing LCM message file: $INFILE"
     MESSAGE_NAME=$( echo $INFILE | sed 's:lcm/::; s/.lcm//')
     
-    echo "Processing LCM message file: $MESSAGE_NAME"
-    echo -n -e "\tCreating LCM CPP message header exlcm/$MESSAGE_NAME.hpp ..."
+    # Check if the structre name == filename
+    STRUCT_NAME=$(cat $INFILE | awk '/struct/ {print $2}')
+    if [ $MESSAGE_NAME != $STRUCT_NAME ]
+    then
+        echo "ERROR! Structure name '$STRUCT_NAME' does not match filename '$MESSAGE_NAME'"
+        echo "Edit the lcm file to ensure filename matches structure name and rerun"
+        exit 1
+    fi        
+    
+    echo -n -e "\tCreating LCM CPP message header exlcm/$STRUCT_NAME.hpp ..."
     # Create lcm CPP header (in exlcm subfolder)
     lcm-gen -x $INFILE
     echo " done."
