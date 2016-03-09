@@ -3,6 +3,8 @@ package exlcm;
 struct new_t
 {
     string      str;
+    boolean     flag;
+    byte        gnash;
     int8_t      i8_scalar;
     int8_t      i8_array[2];
     int16_t     i16_scalar;
@@ -15,9 +17,9 @@ struct new_t
     float       flt_array[2];
     double      dbl_scalar;
     double      dbl_array[2];
-    double     variable_length_array[i32_scalar];
-    boolean     flag;
-    
+    double      variable_length_array[i32_scalar];
+    int32_t     num_channels;
+    simple_channel channels[num_channels];
 }
 
-// simple_channel channels;
+// 

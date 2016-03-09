@@ -5,3 +5,5 @@ msg/*
 launch/all_republishers.launch
 autosrc/*
 lcm/*.lcm
+!lcm/example_t.lcm
+!lcm/simple_channel.lcm

@@ -9,6 +9,14 @@ int main(int argc, char** argv)
         return 1;
 
     exlcm::new_t my_data;
+    
+    if(argc > 1)
+        my_data.str = argv[1];
+    else   
+        my_data.str = "Sample string";
+    my_data.flag = true;
+    my_data.gnash = 0xFF;
+    
     my_data.i8_scalar = 8;
     my_data.i8_array[0] = 8;
     my_data.i8_array[1] = -8;
@@ -37,14 +45,12 @@ int main(int argc, char** argv)
     for(int i=0; i<my_data.i32_scalar; i++)
         my_data.variable_length_array[i] = (double) i;
 
-    if(argc > 1)
-        my_data.str = argv[1];
-    else   
-        my_data.str = "Sample string";
-    my_data.flag = true;
-    
-//    my_data.channel.name = "test channel";
-//    my_data.channel.value = 1.0;
+    my_data.num_channels = 4;
+    my_data.channels.resize(my_data.num_channels);
+    for(int i=0; i<my_data.num_channels; i++) {
+        my_data.channels[i].name = "test channel";
+        my_data.channels[i].value = (double) i;
+    }
 
     lcm.publish("example_t", &my_data);
 
