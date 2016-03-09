@@ -17,6 +17,7 @@ struct new_t
     double      dbl_array[2];
     double     variable_length_array[i32_scalar];
     boolean     flag;
+    
 }
 
 // simple_channel channels;

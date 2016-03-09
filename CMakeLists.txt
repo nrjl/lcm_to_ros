@@ -36,7 +36,7 @@ generate_messages(
 ## catkin specific configuration ##
 ###################################
 catkin_package(
-  INCLUDE_DIRS exlcm # any other custom lcm message package specifiers
+#  INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}
 #  LIBRARIES lcm_to_ros
   CATKIN_DEPENDS roscpp std_msgs message_runtime
 #  DEPENDS system_lib
@@ -48,7 +48,7 @@ catkin_package(
 
 # include_directories(include)
 include_directories( 
-    exlcm
+    ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}
     ${catkin_INCLUDE_DIRS} 
 )
 

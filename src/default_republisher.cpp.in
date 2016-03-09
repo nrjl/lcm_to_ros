@@ -5,7 +5,7 @@
 #include <lcm/lcm-cpp.hpp>
 
 #include "lcm_to_ros/@MESSAGE_TYPE@.h"
-#include "@MESSAGE_TYPE@.hpp"
+#include "@PACKAGE_NAME@/@MESSAGE_TYPE@.hpp"
 
 class LCMToROSRepublisher
 {
@@ -14,7 +14,7 @@ class LCMToROSRepublisher
         ~LCMToROSRepublisher();
         void lcmCallback(const lcm::ReceiveBuffer* rbuf,
                 const std::string& channel_name,
-                const exlcm::@MESSAGE_TYPE@* msg);
+                const @PACKAGE_NAME@::@MESSAGE_TYPE@* msg);
         
     private:        
         ros::NodeHandle nh;
@@ -37,12 +37,12 @@ LCMToROSRepublisher::~LCMToROSRepublisher()
 
 void LCMToROSRepublisher::lcmCallback(const lcm::ReceiveBuffer* rbuf,
         const std::string& channel_name,
-        const exlcm::@MESSAGE_TYPE@* msg)
+        const @PACKAGE_NAME@::@MESSAGE_TYPE@* msg)
 {
     ROS_INFO("Received message on channel \"%s\"", channel_name.c_str());
     
     lcm_to_ros::@MESSAGE_TYPE@ * new_ros_msg;
-    new_ros_msg = reinterpret_cast<lcm_to_ros::@MESSAGE_TYPE@ *>(const_cast<exlcm::@MESSAGE_TYPE@*> (msg));
+    new_ros_msg = reinterpret_cast<lcm_to_ros::@MESSAGE_TYPE@ *>(const_cast<@PACKAGE_NAME@::@MESSAGE_TYPE@*> (msg));
     ros_pub.publish(*new_ros_msg);
 };
         

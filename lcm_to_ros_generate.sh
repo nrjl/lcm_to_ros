@@ -17,10 +17,14 @@ echo -e "\t<group ns=\"lcm_to_ros\">" >>  $LAUNCH_FILE
 for INFILE in lcm/*.lcm
 do
     echo "Processing LCM message file: $INFILE"
+    
+    # Get the topic name, message type and package name
     TOPIC_NAME=$( echo $INFILE | sed 's:lcm/::; s/.lcm//')
+    MESSAGE_TYPE=$(cat $INFILE | awk '/struct/ {print $2}')
+    PACKAGE_NAME=$(cat $INFILE | awk -F'[ ;]' '/package/ {print $2}')
     
     # Check if the structre name == filename
-    MESSAGE_TYPE=$(cat $INFILE | awk '/struct/ {print $2}')
+    
     # if [ $MESSAGE_NAME != $TOPIC_NAME ]
     # then
     #     echo "ERROR! Structure name '$STRUCT_NAME' does not match filename '$MESSAGE_NAME'"
@@ -54,11 +58,13 @@ do
     done
     # awk to extract array indices (if present)
     cat tmp | awk -F"[][ \t]"+ '{ 
-        if (NF == 2)
-            x=$1;
+        if (NF < 2)
+            x=""
+        else if (NF == 2)
+            x=$1
         else {
             if ($3 ~ /^[0-9]*$/)
-                x=$1"["$3"]";
+                x=$1"["$3"]"
             else 
                 x=$1"[]"
         }; 
@@ -75,7 +81,8 @@ do
     echo "// Source message:    $MESSAGE_TYPE.msg" >> $OUTFILE
     echo "// Creation:          $(date '+%c')" >> $OUTFILE
     echo -e "//\n$(printf '/%.0s' {1..71})" >>$OUTFILE
-    cat src/default_republisher.cpp.in | sed "s/@MESSAGE_TYPE@/$MESSAGE_TYPE/g; s/@TOPIC_NAME@/$TOPIC_NAME/g" >> $OUTFILE
+    cat src/default_republisher.cpp.in | sed "s/@MESSAGE_TYPE@/$MESSAGE_TYPE/g" | \
+        sed "s/@TOPIC_NAME@/$TOPIC_NAME/g; s/@PACKAGE_NAME@/$PACKAGE_NAME/g; " >> $OUTFILE
     echo " done."
     
     echo -n -e "\tAdding entry to autosrc/CMakeLists.txt ..."

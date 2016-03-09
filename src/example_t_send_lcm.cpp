@@ -1,5 +1,5 @@
 #include <lcm/lcm-cpp.hpp>
-#include "new_t.hpp"
+#include "exlcm/new_t.hpp"
 
 int main(int argc, char** argv)
 {
@@ -43,8 +43,8 @@ int main(int argc, char** argv)
         my_data.str = "Sample string";
     my_data.flag = true;
     
-    // my_data.channel.name = "test channel";
-    // my_data.channel.value = 1.0;
+//    my_data.channel.name = "test channel";
+//    my_data.channel.value = 1.0;
 
     lcm.publish("example_t", &my_data);
 
