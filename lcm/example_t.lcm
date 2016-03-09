@@ -1,7 +1,8 @@
 package exlcm;
 
-struct example_t
+struct new_t
 {
+    string      str;
     int8_t      i8_scalar;
     int8_t      i8_array[2];
     int16_t     i16_scalar;
@@ -14,6 +15,8 @@ struct example_t
     float       flt_array[2];
     double      dbl_scalar;
     double      dbl_array[2];
-    string      str;
+    double     variable_length_array[i32_scalar];
     boolean     flag;
 }
+
+// simple_channel channels;

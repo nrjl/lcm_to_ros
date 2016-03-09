@@ -1,5 +1,5 @@
 #include <lcm/lcm-cpp.hpp>
-#include "example_t.hpp"
+#include "new_t.hpp"
 
 int main(int argc, char** argv)
 {
@@ -8,7 +8,7 @@ int main(int argc, char** argv)
     if(!lcm.good())
         return 1;
 
-    exlcm::example_t my_data;
+    exlcm::new_t my_data;
     my_data.i8_scalar = 8;
     my_data.i8_array[0] = 8;
     my_data.i8_array[1] = -8;
@@ -31,10 +31,20 @@ int main(int argc, char** argv)
 
     my_data.dbl_scalar = 1.234;
     my_data.dbl_array[0] = 1.2;
-    my_data.dbl_array[1] = -1.2;   
+    my_data.dbl_array[1] = -1.2;
+    
+    my_data.variable_length_array.resize(my_data.i32_scalar);
+    for(int i=0; i<my_data.i32_scalar; i++)
+        my_data.variable_length_array[i] = (double) i;
 
-    my_data.str = "Sample string";
+    if(argc > 1)
+        my_data.str = argv[1];
+    else   
+        my_data.str = "Sample string";
     my_data.flag = true;
+    
+    // my_data.channel.name = "test channel";
+    // my_data.channel.value = 1.0;
 
     lcm.publish("example_t", &my_data);
 

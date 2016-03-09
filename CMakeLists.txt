@@ -36,7 +36,7 @@ generate_messages(
 ## catkin specific configuration ##
 ###################################
 catkin_package(
-  INCLUDE_DIRS exlcm
+  INCLUDE_DIRS exlcm # any other custom lcm message package specifiers
 #  LIBRARIES lcm_to_ros
   CATKIN_DEPENDS roscpp std_msgs message_runtime
 #  DEPENDS system_lib

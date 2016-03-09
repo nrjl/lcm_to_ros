@@ -1,9 +1,9 @@
-add_executable(@MESSAGE_TYPE@_republisher @MESSAGE_TYPE@_republisher.cpp)
-target_link_libraries( @MESSAGE_TYPE@_republisher
+add_executable(@TOPIC_NAME@_republisher @TOPIC_NAME@_republisher.cpp)
+target_link_libraries( @TOPIC_NAME@_republisher
     ${LCM_LIBRARY}
     ${catkin_LIBRARIES}
 )
-add_dependencies(@MESSAGE_TYPE@_republisher 
+add_dependencies(@TOPIC_NAME@_republisher 
     ${${PROJECT_NAME}_EXPORTED_TARGETS} 
     ${catkin_EXPORTED_TARGETS}
 )
