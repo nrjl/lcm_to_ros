@@ -22,4 +22,4 @@ struct new_t
     simple_channel channels[num_channels];
 }
 
-// 
+// HASH 0x0123456789abcdef

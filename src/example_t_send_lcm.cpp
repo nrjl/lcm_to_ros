@@ -1,5 +1,6 @@
 #include <lcm/lcm-cpp.hpp>
 #include "exlcm/new_t.hpp"
+// #include "exlcm_rehash/new_t.hpp" // Use this line instead if using custom hash
 
 int main(int argc, char** argv)
 {
@@ -9,6 +10,7 @@ int main(int argc, char** argv)
         return 1;
 
     exlcm::new_t my_data;
+    // exlcm_rehash::new_t my_data; // Use this line instead if using custom hash
     
     if(argc > 1)
         my_data.str = argv[1];

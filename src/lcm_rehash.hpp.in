@@ -1,0 +1,61 @@
+#ifndef __@NEW_PACKAGE_NAME@_@MESSAGE_TYPE@_hpp__
+#define __@NEW_PACKAGE_NAME@_@MESSAGE_TYPE@_hpp__
+
+#include "@OLD_PACKAGE_NAME@/@MESSAGE_TYPE@.hpp"
+
+namespace @NEW_PACKAGE_NAME@
+{
+
+class @MESSAGE_TYPE@ : public @OLD_PACKAGE_NAME@::@MESSAGE_TYPE@
+{
+    public:
+        inline int encode(void *buf, int offset, int maxlen) const;
+        inline int decode(const void *buf, int offset, int maxlen);
+        inline static int64_t getHash();
+        inline static uint64_t _computeHash(const __lcm_hash_ptr *p);
+};
+
+int @MESSAGE_TYPE@::encode(void *buf, int offset, int maxlen) const
+{
+    int pos = 0, tlen;
+    int64_t hash = (int64_t)getHash();
+
+    tlen = __int64_t_encode_array(buf, offset + pos, maxlen - pos, &hash, 1);
+    if(tlen < 0) return tlen; else pos += tlen;
+
+    tlen = this->_encodeNoHash(buf, offset + pos, maxlen - pos);
+    if (tlen < 0) return tlen; else pos += tlen;
+
+    return pos;
+}
+
+int @MESSAGE_TYPE@::decode(const void *buf, int offset, int maxlen)
+{
+    int pos = 0, thislen;
+
+    int64_t msg_hash;
+    thislen = __int64_t_decode_array(buf, offset + pos, maxlen - pos, &msg_hash, 1);
+    if (thislen < 0) return thislen; else pos += thislen;
+    if (msg_hash != getHash()) return -1;
+
+    thislen = this->_decodeNoHash(buf, offset + pos, maxlen - pos);
+    if (thislen < 0) return thislen; else pos += thislen;
+
+    return pos;
+}
+
+int64_t @MESSAGE_TYPE@::getHash()
+{
+    static int64_t hash = _computeHash(NULL);
+    return hash;
+}
+
+uint64_t @MESSAGE_TYPE@::_computeHash(const __lcm_hash_ptr *)
+{
+    uint64_t hash = @HASH@LL;
+    return hash;
+}
+
+}
+
+#endif

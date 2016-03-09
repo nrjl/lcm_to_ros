@@ -88,3 +88,11 @@ This repo contains a test example. If you haven't added any other LCM messages (
     * Then, show messages using: `rostopic echo /example_t`
 * Finally, in a fourth terminal: `rosrun lcm_to_ros example_t_send_lcm`. This is a small LCM-only (no ROS dependencies) program that publishes a single message onto the LCM topic *example_t*
 * Confirm that a message appears in the `rostopic echo` terminal.
+
+## Rehash tool
+I've also included a tool for overriding the [LCM fingerprint calculation](https://lcm-proj.github.io/type_specification.html). **This is not advised**, but can be handy when trying to force LCM message types to match for automated decoding. In general I suggest you don't use it, but if you need to, after creating a custom lcm message, add a line at the bottom of the lcm file that specifies a 64-bit fingerprint in this format (as in the example_t.lcm message, replace the 0x01... value with whatever you need it to be) `// HASH 0x0123456789abcdef`
+The tool must be run for each message you want to create an overridden hash version of:
+```
+./rehash-lcm-gen.sh lcm/example_t.lcm
+```
+This will create a new folder and hpp file with the package name specified in the lcm file appended with `_rehash`. You can proceed to use this message as usual, as shown in the example publisher, and it will force the LCM encoding and decoding to use the specified fingerprint value.
