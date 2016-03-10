@@ -54,7 +54,7 @@ do
     # Convert datatypes
     for (( i=0; i<${N_TYPES}; i++ ))
     do
-        sed -i "s/${LCM_TYPES[$i]}/${ROS_TYPES[$i]}/" tmp
+        sed -i "s/\b${LCM_TYPES[$i]}\b/${ROS_TYPES[$i]}/" tmp
     done
     # awk to extract array indices (if present)
     cat tmp | awk -F"[][ \t]"+ '{ 
