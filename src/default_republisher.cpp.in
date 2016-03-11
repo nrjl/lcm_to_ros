@@ -27,19 +27,19 @@ LCMToROSRepublisher::LCMToROSRepublisher(ros::NodeHandle& n)
    
     // Publisher/s
     ros_pub = nh.advertise<lcm_to_ros::@MESSAGE_TYPE@>("@TOPIC_NAME@", 10);
-    ROS_INFO("Publisher created");
+    ROS_DEBUG("@TOPIC_NAME@ publisher created");
 };
 
 LCMToROSRepublisher::~LCMToROSRepublisher() 
 {    
-    ROS_INFO("LCMToROSRepublisher destructor.");
+    ROS_INFO("@TOPIC_NAME@ LCMToROSRepublisher destructor.");
 }
 
 void LCMToROSRepublisher::lcmCallback(const lcm::ReceiveBuffer* rbuf,
         const std::string& channel_name,
         const @PACKAGE_NAME@::@MESSAGE_TYPE@* msg)
 {
-    ROS_INFO("Received message on channel \"%s\"", channel_name.c_str());
+    ROS_DEBUG("Received message on channel \"%s\"", channel_name.c_str());
     
     lcm_to_ros::@MESSAGE_TYPE@ * new_ros_msg;
     new_ros_msg = reinterpret_cast<lcm_to_ros::@MESSAGE_TYPE@ *>(const_cast<@PACKAGE_NAME@::@MESSAGE_TYPE@*> (msg));
