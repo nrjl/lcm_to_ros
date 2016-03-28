@@ -64,11 +64,11 @@ catkin_make
 ```
 
 For each specified lcm file (in this case all matched by the `lcm/*.lcm` glob argument), the script will attempt to:
-    * create the lcm message C++ header (in the specified package subdirectory, using `lcm-gen -x`)
-    * create a corresponding ROS message (in the msg subdirectory)
-    * create C++ republisher code (in the autosrc subdirectory) (`-r` flag)
-    * add an entry to autosrc/CMakeLists.txt (`-r` flag)
-    * add an entry to launch file launch/all_republishers.launch (`-l` flag)
+* create the lcm message C++ header (in the specified package subdirectory, using `lcm-gen -x`)
+* create a corresponding ROS message (in the msg subdirectory)
+* create C++ republisher code (in the autosrc subdirectory) (`-r` flag)
+* add an entry to autosrc/CMakeLists.txt (`-r` flag)
+* add an entry to launch file launch/all_republishers.launch (`-l` flag)
 
 
 Once complete, the publishers can be run with:
