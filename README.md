@@ -58,17 +58,17 @@ Also note that the repo ignores files (except the example) in the lcm directory,
 Run the bash script and then make using catkin_make:
 ```
 cd lcm_to_ros
-./lcm_to_ros_generate.sh -rl lcm/*.lcm
+./lcm2ros-gen.sh -rl lcm/*.lcm
 cd ~/catkin_ws
 catkin_make
 ```
 
-This will parse the lcm subdirectory for .lcm files, and for each one attempt to:
-    - create the lcm message C++ header (in the package subdirectory, using `lcm-gen`)
-    - create a corresponding ROS message (in the msg subdirectory)
-    - create C++ republisher code (in the autosrc subdirectory) (-r flag)
-    - add an entry to autosrc/CMakeLists.txt (-r flag)
-    - add an entry to launch file launch/all_republishers.launch (-l flag)
+For each specified lcm file (in this case all matched by the `lcm/*.lcm` glob argument), the script will attempt to:
+    * create the lcm message C++ header (in the specified package subdirectory, using `lcm-gen -x`)
+    * create a corresponding ROS message (in the msg subdirectory)
+    * create C++ republisher code (in the autosrc subdirectory) (`-r` flag)
+    * add an entry to autosrc/CMakeLists.txt (`-r` flag)
+    * add an entry to launch file launch/all_republishers.launch (`-l` flag)
 
 
 Once complete, the publishers can be run with:
