@@ -53,7 +53,7 @@ Add lcm messages to the 'lcm' folder. Some key notes about each lcm file:
 
 So for the file called `example_t.lcm` in the lcm subdirectory that specifies an lcm message type `new_t` under the `exlcm` package, the system will generate the lcm cpp header file in `exlcm/new_t.hpp`, create a ros message in `msg/new_t.msg`, generate a simple republisher code in `autosrc/my_topic_republisher.cpp` that, when run as a ros node, subscribes to the lcm topic `example_t` with lcm message type `new_t` and republishes that message onto the ROS topic `\example_t` with ROS message type `new_t`. It will also add relevant lines to the CMakeLists in the autosrc directory and a line to the `all_republishers` launch file.
 
-Also note that the repo ignores files (except the example) in the lcm directory, so that your message types will not be committed to the repo. You can specify your own package for the lcm messages, in which case they will be generated in a corresponding folder. By default this is `exlcm`. If you choose to use a different package name, it must be added to the top level CMakeLists.txt file in the `catkin_package( INCLUDE_DIRS exlcm [LCM_PACKAGENAME]` specifier so that the code can locate the correct lcm hpp files.
+Also note that the repo ignores files (except the example) in the lcm directory, so that your message types will not be committed to the repo. You can specify your own package for the lcm messages, in which case they will be generated in a corresponding folder. 
 
 Run the bash script and then make using catkin_make:
 ```
