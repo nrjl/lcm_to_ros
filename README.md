@@ -1,14 +1,16 @@
 # LCM to ROS
 
-This package is to subscribe to and republish [Lightweight Communications and Marshalling (LCM)](https://lcm-proj.github.io/) messages into [ROS](http://wiki.ros.org/) messages. LCM is an open-source messaging tool for high-bandwidth, low-latency communications based on UDP multicast.
+This package is to subscribe to and republish [Lightweight Communications and Marshalling (LCM)](https://lcm-proj.github.io/) messages into [ROS](http://wiki.ros.org/) messages (and vice-versa). LCM is an open-source messaging tool for high-bandwidth, low-latency communications based on UDP multicast.
 
-The goal is to make a relatively generic system that requires only LCM message files and automatically generate republishers that subscribe to an LCM topic and republish the same messages onto a ROS topic.
+The goal is to make a relatively generic system that requires only LCM message files and automatically generate republishers that either:
+1. subscribe to an LCM topic and republish the same messages onto a ROS topic, OR
+2. subscribe to an ROS topic and republish the same messages onto a LCM topic,
 
-This package automatically generates ROS message files, CPP files, a launch file and corresponding CMakeLists for catkin_make to create a set of republishers. The system has only been tested on Ubuntu 14.04 with ROS Indigo.
+This package automatically generates ROS message files, CPP files, a launch file and corresponding CMakeLists for catkin_make to create a set of republisher nodes. The system has only been tested on Ubuntu 14.04 with ROS Indigo.
 
 The user should only need to create the \*.lcm message files.
 
-Note that this code is currently restricted to a limited number of data types. The LCM primitive list is available [here](https://lcm-proj.github.io/type_specification.html#type_specification_primitives). We have tested:
+Note that this code is restricted to a generating ROS messages from LCM files and not the other way around (partially because LCM has a more limited number of data types but mostly because that's what I needed). The LCM primitive list is available [here](https://lcm-proj.github.io/type_specification.html#type_specification_primitives). We have tested:
 
 | LCM Primitive | Scalar | Fixed length array | Variable length array |
 | --- | --- | --- | --- |
@@ -58,7 +60,7 @@ Also note that the repo ignores files (except the example) in the lcm directory,
 Run the bash script and then make using catkin_make:
 ```
 cd lcm_to_ros
-./lcm2ros-gen.sh -rl lcm/*.lcm
+./lcm2ros-gen.sh -lf lcm/*.lcm
 cd ~/catkin_ws
 catkin_make
 ```
@@ -66,10 +68,9 @@ catkin_make
 For each specified lcm file (in this case all matched by the `lcm/*.lcm` glob argument), the script will attempt to:
 * create the lcm message C++ header (in the specified package subdirectory, using `lcm-gen -x`)
 * create a corresponding ROS message (in the msg subdirectory)
-* create C++ republisher code (in the autosrc subdirectory) (`-r` flag)
-* add an entry to autosrc/CMakeLists.txt (`-r` flag)
-* add an entry to launch file launch/all_republishers.launch (`-l` flag)
-
+* create LCM to ROS C++ republisher code (in the autosrc subdirectory) (`-l` flag)
+* add an entry to autosrc/CMakeLists.txt (`-l` flag)
+* add an entry to launch file launch/all_republishers.launch (`-f` flag)
 
 Once complete, the publishers can be run with:
 `roslaunch lcm_to_ros all_republishers.launch`
@@ -89,10 +90,13 @@ This repo contains a test example. If you haven't added any other LCM messages (
 * Finally, in a fourth terminal: `rosrun lcm_to_ros example_t_send_lcm`. This is a small LCM-only (no ROS dependencies) program that publishes a single message onto the LCM topic *example_t*
 * Confirm that a message appears in the `rostopic echo` terminal.
 
+## ROS to LCM
+The tool also supports generating republishers from ROS messages to an LCM topic. It works very similarly to the previously specified cases, except that you use the `-r` (ROS to LCM) flag when calling `lcm2ros-gen.sh` instead of `-l`. Note that this will overwrite any existing TOPIC_NAME_republisher node. This is done deliberately to avoid infinitely bouncing messages that would occur if both direction republishers were run concurrently. The CMakeLists entry is the same, but should be added automatically if not already present. The launch file is only created once though, so you might need to create your own manually to include particular republishers.
+
 ## Rehash tool
 I've also included a tool for overriding the [LCM fingerprint calculation](https://lcm-proj.github.io/type_specification.html). **This is not advised**, but can be handy when trying to force LCM message types to match for automated decoding. In general I suggest you don't use it, but if you need to, after creating a custom lcm message, add a line at the bottom of the lcm file that specifies a 64-bit fingerprint in this format (as in the example_t.lcm message, replace the 0x01... value with whatever you need it to be) `// HASH 0x0123456789abcdef`
 The tool must be run for each message (or * glob of messages) you want to create an overridden hash version of:
 ```
 ./rehash-lcm-gen.sh lcm/example_t.lcm
 ```
-This will create a new folder and hpp file with the package name specified in the lcm file appended with `_rehash`. You can proceed to use this message as usual, as shown in the example publisher, and it will force the LCM encoding and decoding to use the specified fingerprint value. The `-o` flag can be used if you also want to modify the autogenerated republishers to use the lcm message with the overridden hash values (must be used after `lcm_to_ros_generate` and must run `catkin_make` again to generate executables with overridden hash methods).
+This will create a new folder and hpp file with the package name specified in the lcm file appended with `_rehash`. You can proceed to use this message as usual, as shown in the example publisher, and it will force the LCM encoding and decoding to use the specified fingerprint value. The `-o` flag can be used if you also want to modify the autogenerated republishers to use the lcm message with the overridden hash values (must be used after `lcm2ros-gen` and must run `catkin_make` again to generate executables with overridden hash methods).

@@ -41,8 +41,7 @@ void LCMToROSRepublisher::lcmCallback(const lcm::ReceiveBuffer* rbuf,
 {
     ROS_DEBUG("Received message on channel \"%s\"", channel_name.c_str());
     
-    lcm_to_ros::@MESSAGE_TYPE@ * new_ros_msg;
-    new_ros_msg = reinterpret_cast<lcm_to_ros::@MESSAGE_TYPE@ *>(const_cast<@PACKAGE_NAME@::@MESSAGE_TYPE@*> (msg));
+    const lcm_to_ros::@MESSAGE_TYPE@ * new_ros_msg = reinterpret_cast<const lcm_to_ros::@MESSAGE_TYPE@ *>(msg);
     ros_pub.publish(*new_ros_msg);
 };
         

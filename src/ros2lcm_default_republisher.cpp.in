@@ -1,0 +1,58 @@
+#include <ros/ros.h>
+#include <ros/console.h>
+#include <string>
+
+#include <lcm/lcm-cpp.hpp>
+
+#include "lcm_to_ros/@MESSAGE_TYPE@.h"
+#include "@PACKAGE_NAME@/@MESSAGE_TYPE@.hpp"
+
+class ROSToLCMRepublisher
+{
+    public:
+        ROSToLCMRepublisher(ros::NodeHandle& n, lcm::LCM& lcm_handle);
+        ~ROSToLCMRepublisher();
+        void rosCallback(const lcm_to_ros::@MESSAGE_TYPE@::ConstPtr& msg);
+        
+    private:        
+        lcm::LCM lcm_handle;
+        ros::NodeHandle nh;
+        ros::Subscriber ros_sub;   
+};
+
+ROSToLCMRepublisher::ROSToLCMRepublisher(ros::NodeHandle& n, lcm::LCM& lcm_handle) 
+{
+    nh = n;
+    lcm_handle = lcm_handle;
+   
+    // Subscribers
+    ros_sub = nh.subscribe<lcm_to_ros::@MESSAGE_TYPE@>("@TOPIC_NAME@", 10, &ROSToLCMRepublisher::rosCallback, this);
+};
+
+ROSToLCMRepublisher::~ROSToLCMRepublisher() 
+{    
+    ROS_INFO("@TOPIC_NAME@ ROSToLCMRepublisher destructor.");
+}
+
+void ROSToLCMRepublisher::rosCallback(const lcm_to_ros::@MESSAGE_TYPE@::ConstPtr& ros_msg)
+{
+    const @PACKAGE_NAME@::@MESSAGE_TYPE@* lcm_msg = reinterpret_cast<const @PACKAGE_NAME@::@MESSAGE_TYPE@*>( ros_msg.get() );
+    lcm_handle.publish("@TOPIC_NAME@", lcm_msg);
+};
+        
+
+int main(int argc, char** argv)
+{
+    lcm::LCM lcm_handle("udpm://239.255.76.67:7667?ttl=1");
+    if(!lcm_handle.good())
+        return 1;
+
+    ros::init(argc, argv, "@TOPIC_NAME@_ros2lcm");
+    ros::NodeHandle nh;   
+
+    ROSToLCMRepublisher handlerObject(nh, lcm_handle);
+    
+    ros::spin();
+    return 0;
+}
+
