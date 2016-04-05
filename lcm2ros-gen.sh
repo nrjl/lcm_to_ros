@@ -74,9 +74,13 @@ fi
 if [ "$GENLAUNCH" = true ] ; then
     mkdir -p launch
     LAUNCH_FILE="launch/all_republishers.launch"
-    echo  "<launch>" > $LAUNCH_FILE
-    echo -e "\t<master auto=\"start\" />" >> $LAUNCH_FILE
-    echo -e "\t<group ns=\"lcm_to_ros\">" >>  $LAUNCH_FILE
+    if [ ! -f $LAUNCH_FILE ] ; then
+        echo  "<launch>" > $LAUNCH_FILE
+        echo -e "\t<master auto=\"start\" />" >> $LAUNCH_FILE
+        echo -e "\t<group ns=\"lcm_to_ros\">" >>  $LAUNCH_FILE
+        echo -e "\t</group>" >>  $LAUNCH_FILE
+        echo "</launch>" >> $LAUNCH_FILE
+    fi
 fi
 
 LCM_TYPES=(int8_t int16_t int32_t int64_t float   double  string boolean byte)
@@ -118,7 +122,7 @@ for INFILE in $INFILES ; do
     echo "# Creation:          $(date '+%c')" >> $OUTFILE
     echo -e "#\n$(printf '#%.0s' {1..71})" >>$OUTFILE
     # sed finds lines in braces {}, removes top and tail lines, leading whitespace and semicolons
-    cat $INFILE | sed '/{/,/}/!d' | sed '1d; $d; s/^[ \t]*//; s/;//; ' > tmp
+    cat $INFILE | sed '/{/,/}/!d' | sed '1d; $d; s/;//; ' | awk '{ printf "%s %s\n", $1, $2 }'> tmp
     # Convert datatypes
     for (( i=0; i<${N_TYPES}; i++ ))
     do
@@ -164,14 +168,13 @@ for INFILE in $INFILES ; do
         fi
     fi
     
-    if [ "$GENLAUNCH" = true ] ; then    
+    if [ "$GENLAUNCH" = true ] && ! grep -q "type=\"${TOPIC_NAME}_republisher" $LAUNCH_FILE ; then    
         echo -n -e "\tAdding entry to $LAUNCH_FILE ..."
-        echo -e "\t\t<node pkg=\"lcm_to_ros\" type=\"${TOPIC_NAME}_republisher\" respawn=\"false\" name=\"${TOPIC_NAME}_republisher\" output=\"screen\"/>" >> $LAUNCH_FILE
+        head -n-2 $LAUNCH_FILE > tmp 
+        echo -e "\t\t<node pkg=\"lcm_to_ros\" type=\"${TOPIC_NAME}_republisher\" respawn=\"false\" name=\"${TOPIC_NAME}_republisher\" output=\"screen\"/>" >> tmp
+        tail -n2 $LAUNCH_FILE >> tmp
+        mv tmp $LAUNCH_FILE
         echo " done."
     fi
 done
 
-if [ "$GENLAUNCH" = true ] ; then  
-    echo -e "\t</group>" >>  $LAUNCH_FILE
-    echo "</launch>" >> $LAUNCH_FILE
-fi

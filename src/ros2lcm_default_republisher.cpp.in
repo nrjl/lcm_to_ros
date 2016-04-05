@@ -10,7 +10,7 @@
 class ROSToLCMRepublisher
 {
     public:
-        ROSToLCMRepublisher(ros::NodeHandle& n, lcm::LCM& lcm_handle);
+        ROSToLCMRepublisher(ros::NodeHandle& n, lcm::LCM& lh);
         ~ROSToLCMRepublisher();
         void rosCallback(const lcm_to_ros::@MESSAGE_TYPE@::ConstPtr& msg);
         
@@ -20,10 +20,10 @@ class ROSToLCMRepublisher
         ros::Subscriber ros_sub;   
 };
 
-ROSToLCMRepublisher::ROSToLCMRepublisher(ros::NodeHandle& n, lcm::LCM& lcm_handle) 
+ROSToLCMRepublisher::ROSToLCMRepublisher(ros::NodeHandle& n, lcm::LCM& lh) 
 {
     nh = n;
-    lcm_handle = lcm_handle;
+    lcm_handle = lh;
    
     // Subscribers
     ros_sub = nh.subscribe<lcm_to_ros::@MESSAGE_TYPE@>("@TOPIC_NAME@", 10, &ROSToLCMRepublisher::rosCallback, this);
