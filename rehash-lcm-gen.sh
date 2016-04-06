@@ -43,9 +43,9 @@ for INFILE in "$@" ; do
             
     mkdir -p $NEW_PACKAGE_NAME
 
-    # Create new hpp with overriden hash methods
+    # Create new hpp with overridden hash methods
     OUTFILE="$NEW_PACKAGE_NAME/$MESSAGE_TYPE.hpp"
-    echo " Creating new header $OUTFILE with overriden hash methods." >&2
+    echo " Creating new header $OUTFILE with overridden hash methods." >&2
     echo " Message type:     $MESSAGE_TYPE" >&2
     echo " Old package name: $OLD_PACKAGE_NAME" >&2
     echo " New package name: $NEW_PACKAGE_NAME" >&2
