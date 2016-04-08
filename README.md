@@ -53,7 +53,7 @@ The code works via two primary bash scripts:
 1. rosmsg-gen.sh - This script takes as input a list of lcm message files and, for each file:
     - uses the LCM tool `lcm-gen [-x]` to generate a CPP header definition for the message, 
     - generates a corresponding ROS message type, and
-    - if an lcm fingerprint value is supplied as a comment line in the lcm message file (see the `lcm/example_type.lcm` file), the program also generates a derived class defintion that will use the overridden hash value for that message (not usually recommended, if you don't know if you need this, ignore it).
+    - if an lcm fingerprint value is supplied as a comment line in the lcm message file (see the `lcm/example_type.lcm` file), the program also generates a derived class definition that will use the overridden hash value for that message (not usually recommended, if you don't know if you need this, ignore it).
 2. rosrepub-gen.sh - This script takes as input a configuration file and generates CPP code and a ROS launch file for ROS nodes that either:
     - listen to an LCM topic and republish received messages onto a ROS topic, or
     - listen to a ROS topic and republish received messages onto an LCM topic.
