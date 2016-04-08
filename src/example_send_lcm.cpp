@@ -1,6 +1,6 @@
 #include <lcm/lcm-cpp.hpp>
-#include "exlcm/new_t.hpp"
-// #include "exlcm_rehash/new_t.hpp" // Use this line instead if using custom hash
+#include "exlcm/example_type.hpp"
+// #include "exlcm_rehash/example_type.hpp" // Use this line instead if using custom hash
 
 int main(int argc, char** argv)
 {
@@ -9,8 +9,8 @@ int main(int argc, char** argv)
     if(!lcm.good())
         return 1;
 
-    exlcm::new_t my_data;
-    // exlcm_rehash::new_t my_data; // Use this line instead if using custom hash
+    exlcm::example_type my_data;
+    // exlcm_rehash::example_type my_data; // Use this line instead if using custom hash
     
     if(argc > 1)
         my_data.str = argv[1];
@@ -54,7 +54,7 @@ int main(int argc, char** argv)
         my_data.channels[i].value = (double) i;
     }
 
-    lcm.publish("example_t", &my_data);
+    lcm.publish("example_topic", &my_data);
 
     return 0;
 }

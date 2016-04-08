@@ -1,6 +1,6 @@
 package exlcm;
 
-struct new_t
+struct example_type
 {
     string      str;
     boolean     flag;
