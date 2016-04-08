@@ -2,8 +2,10 @@
 *~
 exlcm/*
 msg/*
-launch/all_republishers.launch
+launch/*.launch
 autosrc/*
 lcm/*.lcm
-!lcm/example_t.lcm
+!lcm/example_type.lcm
 !lcm/simple_channel.lcm
+repub_configs/*
+!repub_configs/example_republishers.cfg
