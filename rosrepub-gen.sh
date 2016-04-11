@@ -42,8 +42,10 @@ fi
 mkdir -p launch autosrc
 touch -a autosrc/CMakeLists.txt
 
-# Create (empty) launch file 
-LAUNCH_FILE="launch/$( echo $1 | cut -f1 -d "." ).launch"
+# Create (empty) launch file
+LAUNCH_FILE=${1##*/}                # Remove leading directories
+LAUNCH_FILE=${LAUNCH_FILE%.*}       # Remove trailing extension
+LAUNCH_FILE="launch/${LAUNCH_FILE}.launch"
 echo "Adding publishers to launch file: ${LAUNCH_FILE} (will be overwritten)" >&2
 # if [ ! -f $LAUNCH_FILE ] ; then
     echo  "<launch>" > $LAUNCH_FILE
