@@ -3,8 +3,9 @@
 This package is to subscribe to and republish [Lightweight Communications and Marshalling (LCM)](https://lcm-proj.github.io/) messages into [ROS](http://wiki.ros.org/) messages (and vice-versa). LCM is an open-source messaging tool for high-bandwidth, low-latency communications based on UDP multicast.
 
 The goal is to make a relatively generic system that requires only LCM message files and automatically generate republishers that either:
+
 1. subscribe to an LCM topic and republish the equivalent (same data) messages onto a ROS topic, OR
-2. subscribe to an ROS topic and republish the equivalent (same data) messages onto a LCM topic,
+2. subscribe to an ROS topic and republish the equivalent (same data) messages onto a LCM topic.
 
 This package automatically generates ROS message files, CPP files, a launch file and corresponding CMakeLists for catkin_make to create a set of republisher nodes. The system has only been tested on Ubuntu 14.04 with ROS Indigo.
 
@@ -31,7 +32,17 @@ A possibly better approach would be to try and read out the field names from the
 
 ## Installation:
 
-(Dependency) Install LCM:
+Required dependencies:
+```
+sudo apt-get install autoconf build-essential libglib2.0-dev
+```
+
+LCM strongly recommended:
+```
+sudo apt-get install openjdk-6-jdk python-dev
+```
+
+Install LCM:
 ```
 git clone https://github.com/lcm-proj/lcm lcm
 cd lcm
@@ -41,7 +52,7 @@ make
 sudo make install
 ```
 
-Clone this repository (assuming default catkin_make workspace):
+Clone this repository (assuming default catkin workspace at `~/catkin_ws`):
 ```
 cd ~/catkin_ws/src
 git clone https://github.com/nrjl/lcm_to_ros.git
@@ -50,33 +61,35 @@ cd lcm_to_ros
 
 ## General process
 The code works via two primary bash scripts:
-1. rosmsg-gen.sh - This script takes as input a list of lcm message files and, for each file:
+
+1. `rosmsg-gen.sh` - This script takes as input a list of lcm message files and, for each file:
     - uses the LCM tool `lcm-gen [-x]` to generate a CPP header definition for the message, 
     - generates a corresponding ROS message type, and
     - if an lcm fingerprint value is supplied as a comment line in the lcm message file (see the `lcm/example_type.lcm` file), the program also generates a derived class definition that will use the overridden hash value for that message (not usually recommended, if you don't know if you need this, ignore it).
-2. rosrepub-gen.sh - This script takes as input a configuration file and generates CPP code and a ROS launch file for ROS nodes that either:
+2. `rosrepub-gen.sh` - This script takes as input a configuration file and generates CPP code and a ROS launch file for ROS nodes that either:
     - listen to an LCM topic and republish received messages onto a ROS topic, or
     - listen to a ROS topic and republish received messages onto an LCM topic.
 
 ## Test example
 The repo contains a test example. If you haven't added any other LCM messages (or even if you have) you should be able to confirm the code is working by:
+
 1. Generate ROS messages for all lcm files in your lcm folder by running (at the root project directory of `ros2lcm`):
-```
-./rosmsg-gen.sh lcm/*.lcm
-```
-This will generate standard LCM hpp message definitions (in the `exlcm` directory), ROS messages (in the `msg` directory) and a message definition with an overridden hash value of the `example_type` (in the `exlcm_rehash` directory). Feel free to examine (but please don't modify) the ROS message definitions.
+
+        ./rosmsg-gen.sh lcm/*.lcm
+
+    This will generate standard LCM hpp message definitions (in the `exlcm` directory), ROS messages (in the `msg` directory) and a message definition with an overridden hash value of the `example_type` (in the `exlcm_rehash` directory). Feel free to examine (but please don't modify) the ROS message definitions.
 
 2. Examine the config file `repub_configs/example_republishers.cfg`. It contains specifications for generating two republishers (one for each non `#` commented line). The first will subscribe to the LCM topic *example_topic* of message type `exlcm/example_type`, and publish messages with the newly-generated ROS message type `lcm_to_ros/example_type` onto a ROS topic of the same name (*example_topic*). The second example does the inverse with topic name *other_topic* but uses the LCM message type with the overridden hash value (using the `exlcm_rehash` package specifier). Generate the ROS republisher code by running:
-```
-./rosrepub-gen.sh repub_configs/example_republishers.cfg
-```
-This will generate CPP republisher code in the `autosrc` folder, and a corresponding launch file in the `launch` directory.
 
+        ./rosrepub-gen.sh repub_configs/example_republishers.cfg
+
+    This will generate CPP republisher code in the `autosrc` folder, and a corresponding launch file in the `launch` directory.
 3. Compile the newly-generated code using catkin:
-```
-cd ~/catkin_ws
-catkin_make
-``` 
+
+        cd ~/catkin_ws
+        catkin_make
+
+
 4. Confirm that it worked!  
     1. In a new terminal, run the launch file: `roslaunch lcm_to_ros example_republishers.launch`
     2. In a new terminal: 
