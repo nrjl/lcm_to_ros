@@ -33,17 +33,17 @@ A possibly better approach would be to try and read out the field names from the
 ## Installation:
 
 Required dependencies:
-```
+```bash
 sudo apt-get install autoconf build-essential libglib2.0-dev
 ```
 
 LCM strongly recommended:
-```
+```bash
 sudo apt-get install openjdk-6-jdk python-dev
 ```
 
 Install LCM:
-```
+```bash
 git clone https://github.com/lcm-proj/lcm lcm
 cd lcm
 ./bootstrap.sh
@@ -53,7 +53,7 @@ sudo make install
 ```
 
 Clone this repository (assuming default catkin workspace at `~/catkin_ws`):
-```
+```bash
 cd ~/catkin_ws/src
 git clone https://github.com/nrjl/lcm_to_ros.git
 cd lcm_to_ros
@@ -74,18 +74,21 @@ The code works via two primary bash scripts:
 The repo contains a test example. If you haven't added any other LCM messages (or even if you have) you should be able to confirm the code is working by:
 
 1. Generate ROS messages for all lcm files in your lcm folder by running (at the root project directory of `ros2lcm`):
-
+    <!-- language: lang-bash -->
         ./rosmsg-gen.sh lcm/*.lcm
 
     This will generate standard LCM hpp message definitions (in the `exlcm` directory), ROS messages (in the `msg` directory) and a message definition with an overridden hash value of the `example_type` (in the `exlcm_rehash` directory). Feel free to examine (but please don't modify) the ROS message definitions.
 
 2. Examine the config file `repub_configs/example_republishers.cfg`. It contains specifications for generating two republishers (one for each non `#` commented line). The first will subscribe to the LCM topic *example_topic* of message type `exlcm/example_type`, and publish messages with the newly-generated ROS message type `lcm_to_ros/example_type` onto a ROS topic of the same name (*example_topic*). The second example does the inverse with topic name *other_topic* but uses the LCM message type with the overridden hash value (using the `exlcm_rehash` package specifier). Generate the ROS republisher code by running:
 
+    <!-- language: lang-bash -->
         ./rosrepub-gen.sh repub_configs/example_republishers.cfg
 
     This will generate CPP republisher code in the `autosrc` folder, and a corresponding launch file in the `launch` directory.
 3. Compile the newly-generated code using catkin:
 
+    <!-- language: lang-bash -->
+    
         cd ~/catkin_ws
         catkin_make
 
@@ -105,11 +108,11 @@ Add lcm messages to the `lcm` subdirectory. Some key notes about each lcm file:
 * Struct name - The message type will be the `struct` name specified in the lcm file. The ROS message generated will reflect this, so name each message type with a unique name, even if they have different package names. 
 
 Thus, the sample lcm definition `example_type.lcm` in the lcm subdirectory specifies an lcm message type `example_type` under the `exlcm` package. Also note that the repo `.gitignore` is set up to ignore files (except the examples) in the lcm directory, so that your messages will not be committed to the repo.  To generate LCM hpp files and ROS msg files, use: 
-```
+```bash
 ./rosmsg-gen.sh lcm/MY_LCM_MESSAGE.lcm
 ``` 
 or, to generate ROS messages for all .lcm files in the lcm directory, use: 
-``` 
+```bash
 ./rosmsg-gen.sh -a 
 ``` 
 
@@ -128,10 +131,12 @@ Where:
 
 The program will generate cpp code and a `CMakeLists.txt` file for these republisher nodes in the `autosrc` folder. It will also create a launch file in the `launch` folder corresponding to the filename of the config file. After generating the code it will need to be built with `catkin_make`.
 
-Once complete, the publishers can be run with: `roslaunch lcm_to_ros CONFIG_NAME.launch` (where `CONFIG_NAME` is the name of the config file without file extension). Note that this launch file places all republishers under the namespace `\lcm_to_ros`.  
-Each republisher can also be launched separately with:
-`rosrun lcm_to_ros TOPIC_NAME_republisher`
-As usual, output topics can be remapped using standard ROS commands if required.
+Once complete, the publishers can be run with: 
+```bash
+roslaunch lcm_to_ros CONFIG_NAME.launch
+```
+(where `CONFIG_NAME` is the name of the config file without file extension). Note that this launch file places all republishers under the namespace `\lcm_to_ros`.  
+Each republisher can also be launched separately with: `rosrun lcm_to_ros TOPIC_NAME_republisher`. As usual, output topics can be remapped using standard ROS commands if required.
 
 ## Rehash tool
 [LCM uses a special fingerprint calculation](https://lcm-proj.github.io/type_specification.html) to identify messages to ensure that they can be properly decoded using the same specification that was used to generate them. In general, this is an excellent idea. However, in some cases, you may want to specify a specific hash value. The `rosmsg-gen` tool will attempt to create a version of each message with a user-specified hash value if required. **This is not advised**, but can be handy when trying to force LCM message types to match for automated decoding. In general I suggest you don't use it, but if you need to, after creating a custom lcm message, add a line at the bottom of the lcm file that specifies a 64-bit fingerprint in the format `// HASH 0x0123456789abcdef`
