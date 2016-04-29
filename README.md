@@ -129,6 +129,11 @@ Where:
 * *message_type* is the message type (the keyword after `struct` in the lcm message definition)
 * *direction* is either the string `lcm2ros` or `ros2lcm`. Note that only one is allowed at a time on the same topic to prevent infinite message bouncing. If you need bidirectional messaging there could be some workarounds you could use to filter the messages such as timestamps, but that is not implemented here.
 
+Use the `rosrepub-gen.sh` script to generate republisher node code from your config file:
+```
+./rosrepub-gen.sh repub_configs/CONFIG_NAME.cfg
+```
+
 The program will generate cpp code and a `CMakeLists.txt` file for these republisher nodes in the `autosrc` folder. It will also create a launch file in the `launch` folder corresponding to the filename of the config file. After generating the code it will need to be built with `catkin_make`.
 
 Once complete, the publishers can be run with: 
