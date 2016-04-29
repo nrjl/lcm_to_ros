@@ -5,7 +5,7 @@ This package is to subscribe to and republish [Lightweight Communications and Ma
 The goal is to make a relatively generic system that requires only LCM message files and automatically generate republishers that either:
 
 1. subscribe to an LCM topic and republish the equivalent (same data) messages onto a ROS topic, OR
-2. subscribe to an ROS topic and republish the equivalent (same data) messages onto a LCM topic.
+2. subscribe to a ROS topic and republish the equivalent (same data) messages onto a LCM topic.
 
 This package automatically generates ROS message files, CPP files, a launch file and corresponding CMakeLists for catkin_make to create a set of republisher nodes. The system has only been tested on Ubuntu 14.04 with ROS Indigo.
 
@@ -128,6 +128,11 @@ Where:
 * *package_name* is the name of the package of the lcm message you are using (by default, the rehashed version of the message is generated in *original_package_rehash*, so you can use that if you want to use the rehashed version of the message, as shown in the example)
 * *message_type* is the message type (the keyword after `struct` in the lcm message definition)
 * *direction* is either the string `lcm2ros` or `ros2lcm`. Note that only one is allowed at a time on the same topic to prevent infinite message bouncing. If you need bidirectional messaging there could be some workarounds you could use to filter the messages such as timestamps, but that is not implemented here.
+
+Use the `rosrepub-gen.sh` script to generate republisher node code from your config file:
+```
+./rosrepub-gen.sh repub_configs/CONFIG_NAME.cfg
+```
 
 The program will generate cpp code and a `CMakeLists.txt` file for these republisher nodes in the `autosrc` folder. It will also create a launch file in the `launch` folder corresponding to the filename of the config file. After generating the code it will need to be built with `catkin_make`.
 
