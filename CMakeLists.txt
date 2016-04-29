@@ -58,7 +58,11 @@ include_directories(
 # )
 
 add_subdirectory(src)
-add_subdirectory(autosrc)
+
+get_filename_component(_fullPath autosrc ABSOLUTE)
+if(EXISTS ${_fullPath}/CMakeLists.txt)
+    add_subdirectory(autosrc)
+endif(EXISTS ${_fullPath}/CMakeLists.txt)
 
 #############
 ## Install ##
