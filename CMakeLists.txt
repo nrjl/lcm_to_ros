@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/cmake)
 
-find_package(LCM REQUIRED)
+find_package(lcm REQUIRED)
 if (LCM_FOUND)
     include_directories(${LCM_INCLUDE_DIRS})
     # add_subdirectory(src)
