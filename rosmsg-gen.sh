@@ -75,7 +75,11 @@ for INFILE in $INFILES ; do
     # Convert datatypes
     for (( i=0; i<${N_TYPES}; i++ ))
     do
-        sed -i "s/\b${LCM_TYPES[$i]}\b/${ROS_TYPES[$i]}/" tmp
+        if [[ "$unamestr" == 'Linux' ]]; then
+           sed -i "s/\b${LCM_TYPES[$i]}\b/${ROS_TYPES[$i]}/" tmp
+        elif [[ "$unamestr" == 'Darwin' ]]; then
+           sed -i '.bak' "s/\b${LCM_TYPES[$i]}\b/${ROS_TYPES[$i]}/" tmp
+        fi
     done
     # awk to extract array indices (if present)
     cat tmp | awk -F"[][ \t]"+ '{ 
