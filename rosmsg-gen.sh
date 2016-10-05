@@ -44,6 +44,7 @@ LCM_TYPES=(int8_t int16_t int32_t int64_t float   double  string boolean byte)
 ROS_TYPES=(int8   int16   int32   int64   float32 float64 string bool byte)
 
 N_TYPES=${#LCM_TYPES[@]}
+unamestr=`uname`
 
 for INFILE in $INFILES ; do
     echo "Processing LCM message file: $INFILE" >&2
