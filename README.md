@@ -32,27 +32,11 @@ A possibly better approach would be to try and read out the field names from the
 
 ## Installation:
 
-Required dependencies:
-```bash
-sudo apt-get install autoconf build-essential libglib2.0-dev
-```
+First, you need to install LCM. Instead of copying the intructions here, I'll link to the LCM build instructions, that contains instructions for various platforms.
 
-LCM strongly recommended:
-```bash
-sudo apt-get install openjdk-6-jdk python-dev
-```
+[LCM Build Instructions](https://github.com/lcm-proj/lcm/blob/master/docs/content/build-instructions.md)
 
-Install LCM:
-```bash
-git clone https://github.com/lcm-proj/lcm lcm
-cd lcm
-./bootstrap.sh
-./configure
-make
-sudo make install
-```
-
-Clone this repository (assuming default catkin workspace at `~/catkin_ws`):
+Then, clone this repository (assuming default catkin workspace at `~/catkin_ws`):
 ```bash
 cd ~/catkin_ws/src
 git clone https://github.com/nrjl/lcm_to_ros.git

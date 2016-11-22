@@ -44,6 +44,7 @@ LCM_TYPES=(int8_t int16_t int32_t int64_t float   double  string boolean byte)
 ROS_TYPES=(int8   int16   int32   int64   float32 float64 string bool byte)
 
 N_TYPES=${#LCM_TYPES[@]}
+unamestr=`uname`
 
 for INFILE in $INFILES ; do
     echo "Processing LCM message file: $INFILE" >&2
@@ -75,7 +76,11 @@ for INFILE in $INFILES ; do
     # Convert datatypes
     for (( i=0; i<${N_TYPES}; i++ ))
     do
-        sed -i "s/\b${LCM_TYPES[$i]}\b/${ROS_TYPES[$i]}/" tmp
+        if [[ "$unamestr" == 'Linux' ]]; then
+           sed -i "s/\b${LCM_TYPES[$i]}\b/${ROS_TYPES[$i]}/" tmp
+        elif [[ "$unamestr" == 'Darwin' ]]; then
+           sed -i '.bak' "s/\b${LCM_TYPES[$i]}\b/${ROS_TYPES[$i]}/" tmp
+        fi
     done
     # awk to extract array indices (if present)
     cat tmp | awk -F"[][ \t]"+ '{ 
