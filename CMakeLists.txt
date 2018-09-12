@@ -7,7 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/cmake)
+SET(CMAKE_MODULE_PATH ${${PROJECT_NAME}_SOURCE_DIR}/cmake)
 
 find_package(lcm REQUIRED)
 if (LCM_FOUND)
@@ -19,8 +19,8 @@ endif (LCM_FOUND)
 ## Declare ROS messages, services and actions ##
 ################################################
 
-FILE(GLOB rosMsgFiles RELATIVE "${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/msg" 
-    "${CMAKE_SOURCE_DIR}/${PROJECT_NAME}/msg/*.msg")
+FILE(GLOB rosMsgFiles RELATIVE "${${PROJECT_NAME}_SOURCE_DIR}/msg" 
+    "${${PROJECT_NAME}_SOURCE_DIR}/msg/*.msg")
 
 FOREACH(rosMsg ${rosMsgFiles})
     MESSAGE( STATUS "Processing message file: ${rosMsg}" )
@@ -48,7 +48,7 @@ catkin_package(
 
 # include_directories(include)
 include_directories( 
-    ${CMAKE_SOURCE_DIR}/${PROJECT_NAME}
+    ${${PROJECT_NAME}_SOURCE_DIR}
     ${catkin_INCLUDE_DIRS} 
 )
 
