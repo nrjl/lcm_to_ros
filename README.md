@@ -29,6 +29,9 @@ The LCM primitive types work fine because they can be directly converted into RO
 
 A possibly better approach would be to try and read out the field names from the message and then set them directly, which might be safer than the pointer cast but uglier in terms of generating the CPP file, possible future work.
 
+**NOTE:** Multidimensional arrays as used in lcm such as `double  image[3][128][128]` will *not* work. This is because ros does not handle multi-dimensional arrays in the same way. As noted in ([#5][i5]), options would be to nest the array using multiple message classes, or I could try to fix this with [multiarrays](http://docs.ros.org/en/api/std_msgs/html/msg/Float64MultiArray.html) if there is interest.
+
+[i5]: https://github.com/nrjl/lcm_to_ros/issues/5
 
 ## Installation:
 
